@@ -1,0 +1,8 @@
+{
+  "name": "Madina Masjid Admin App",
+  "description": "Modern, peaceful, and accessible mobile community app for Masjid prayers, events, community services, Qibla, Tasbeeh, and Islamic life.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

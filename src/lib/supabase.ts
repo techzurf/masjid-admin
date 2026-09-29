@@ -1119,3 +1119,274 @@ export async function deleteCommunityMember(id: string): Promise<{
   }
 }
 
+// ============================================================================
+// Masjid Notices Module (Supabase table: public.masjid_notices)
+// ============================================================================
+
+export interface MasjidNotice {
+  id: string;
+  title: string;
+  message: string;
+  category: string;
+  image_url?: string | null;
+  is_active: boolean;
+  priority: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateMasjidNoticeInput {
+  title: string;
+  message: string;
+  category?: string;
+  image_url?: string | null;
+  is_active?: boolean;
+  priority?: number;
+}
+
+/**
+ * Calculates human-readable time ago from ISO date string
+ * Examples: "Just now", "15 mins ago", "2 hours ago", "Yesterday"
+ */
+export function getNoticeTimeAgo(dateString: string): string {
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Recently';
+
+    const now = new Date();
+    const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffSec < 60) {
+      return 'Just now';
+    }
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) {
+      return diffMin === 1 ? '1 min ago' : `${diffMin} mins ago`;
+    }
+    const diffHours = Math.floor(diffMin / 60);
+    if (diffHours < 24) {
+      return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+    }
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays === 1) {
+      return 'Yesterday';
+    }
+    if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    }
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  } catch {
+    return 'Recently';
+  }
+}
+
+/**
+ * Fetch the highest-priority active notice for the home screen directly from Supabase
+ * is_active = true, ordered by priority DESC, created_at DESC
+ */
+export async function fetchHighestPriorityActiveNotice(): Promise<{
+  data: MasjidNotice | null;
+  error: string | null;
+}> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { data: null, error: 'Supabase client not connected.' };
+  }
+
+  try {
+    const { data, error } = await client
+      .from('masjid_notices')
+      .select('*')
+      .eq('is_active', true)
+      .order('priority', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('Supabase notice fetch error:', error.message);
+      return { data: null, error: error.message };
+    }
+
+    return { data: data || null, error: null };
+  } catch (err: any) {
+    return { data: null, error: err?.message || 'Failed to fetch notice' };
+  }
+}
+
+/**
+ * Fetch all notices for Admin Panel management directly from Supabase
+ */
+export async function fetchAllNoticesAdmin(): Promise<{
+  data: MasjidNotice[];
+  error: string | null;
+}> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { data: [], error: 'Supabase client not connected.' };
+  }
+
+  try {
+    const { data, error } = await client
+      .from('masjid_notices')
+      .select('*')
+      .order('priority', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Admin notices fetch warning:', error.message);
+      return { data: [], error: error.message };
+    }
+
+    return { data: data || [], error: null };
+  } catch (err: any) {
+    return { data: [], error: err?.message || 'Failed to fetch notices' };
+  }
+}
+
+/**
+ * Create a new notice in Supabase
+ */
+export async function createMasjidNotice(input: CreateMasjidNoticeInput): Promise<{
+  data: MasjidNotice | null;
+  error: string | null;
+}> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { data: null, error: 'Supabase client not connected.' };
+  }
+
+  try {
+    const payload = {
+      title: input.title.trim(),
+      message: input.message.trim(),
+      category: (input.category && input.category.trim()) || 'Important Notice',
+      image_url: (input.image_url && input.image_url.trim()) || null,
+      is_active: input.is_active !== undefined ? input.is_active : true,
+      priority: typeof input.priority === 'number' ? input.priority : 0,
+    };
+
+    const { data, error } = await client
+      .from('masjid_notices')
+      .insert([payload])
+      .select()
+      .single();
+
+    if (error) {
+      console.warn('Error creating notice in Supabase:', error.message);
+      return { data: null, error: error.message };
+    }
+
+    return { data, error: null };
+  } catch (err: any) {
+    return { data: null, error: err?.message || 'Failed to create notice' };
+  }
+}
+
+/**
+ * Update an existing notice in Supabase
+ */
+export async function updateMasjidNotice(
+  id: string,
+  updates: Partial<CreateMasjidNoticeInput>
+): Promise<{
+  data: MasjidNotice | null;
+  error: string | null;
+}> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { data: null, error: 'Supabase client not connected.' };
+  }
+
+  try {
+    const payload: any = {
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (payload.title) payload.title = payload.title.trim();
+    if (payload.message) payload.message = payload.message.trim();
+    if (payload.category) payload.category = payload.category.trim();
+    if (payload.image_url !== undefined) {
+      payload.image_url = payload.image_url ? payload.image_url.trim() : null;
+    }
+
+    const { data, error } = await client
+      .from('masjid_notices')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.warn('Error updating notice in Supabase:', error.message);
+      return { data: null, error: error.message };
+    }
+
+    return { data, error: null };
+  } catch (err: any) {
+    return { data: null, error: err?.message || 'Failed to update notice' };
+  }
+}
+
+/**
+ * Delete a notice from Supabase by ID
+ */
+export async function deleteMasjidNotice(id: string): Promise<{
+  success: boolean;
+  error: string | null;
+}> {
+  const client = getSupabaseClient();
+  if (!client) {
+    return { success: false, error: 'Supabase client not connected.' };
+  }
+
+  try {
+    const { error } = await client
+      .from('masjid_notices')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.warn('Error deleting notice from Supabase:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, error: null };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed to delete notice' };
+  }
+}
+
+/**
+ * Subscribe to real-time changes on public.masjid_notices
+ */
+export function subscribeToMasjidNotices(onChange: () => void): () => void {
+  const client = getSupabaseClient();
+  if (!client) {
+    return () => {};
+  }
+
+  try {
+    const channel = client
+      .channel('realtime:masjid_notices')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'masjid_notices' },
+        () => {
+          onChange();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      try {
+        client.removeChannel(channel);
+      } catch {}
+    };
+  } catch {
+    return () => {};
+  }
+}
+
+

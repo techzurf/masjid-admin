@@ -6,7 +6,7 @@ import { RamadanCountdownCard } from '../home/RamadanCountdownCard';
 import { QuickActions } from '../home/QuickActions';
 import { AnnouncementBanner } from '../home/AnnouncementBanner';
 import { ConnectMuslimPreview } from '../home/ConnectMuslimPreview';
-import { UpcomingEventsPreview } from '../home/UpcomingEventsPreview';
+import { HomeServicesGrid } from '../home/HomeServicesGrid';
 import { LatestVideosSection } from '../home/LatestVideosSection';
 import { DailyReminderCard } from '../home/DailyReminderCard';
 import { PhoneCall } from 'lucide-react';
@@ -17,7 +17,7 @@ export const HomeScreen: React.FC = () => {
   const t = useTranslation(settings.language);
 
   return (
-    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-6">
+    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
       {/* 0. Ramadan Mode Dedicated Countdown Card (Iftar & Suhoor live timers) */}
       {settings.ramadanMode && <RamadanCountdownCard />}
 
@@ -33,8 +33,8 @@ export const HomeScreen: React.FC = () => {
         {/* 3. Important Masjid Announcement / Urgent Notice */}
         <AnnouncementBanner />
 
-        {/* 4. Upcoming Events Carousel */}
-        <UpcomingEventsPreview />
+        {/* 4. Community Services 8-Card Grid (2x4) */}
+        <HomeServicesGrid />
 
         {/* 5. Latest Videos Horizontal YouTube Scroller */}
         <LatestVideosSection />

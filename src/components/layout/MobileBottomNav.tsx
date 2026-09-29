@@ -189,7 +189,7 @@ export const MobileBottomNav: React.FC = () => {
     <nav
       ref={containerRef}
       aria-label="Masjid Bottom Navigation"
-      className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto select-none pointer-events-auto overflow-visible"
+      className="w-full shrink-0 z-40 select-none pointer-events-auto overflow-visible relative min-h-[68px]"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}

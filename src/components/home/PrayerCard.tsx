@@ -96,7 +96,7 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({ className }) => {
         <div className="mt-2.5 pt-2 border-t border-white/15 flex items-center justify-between text-[11px] text-emerald-100/90">
           <div className="flex items-center gap-1">
             <Bell className="w-3 h-3 text-amber-300" />
-            <span>Alert: <strong>{settings.athanSound}</strong> ({settings.reminderMinutesBefore === 0 ? 'At Adhan' : `${settings.reminderMinutesBefore}m before`})</span>
+            <span>Alert: <strong>{settings.athanSound === 'Madina' ? 'Madina Adhan' : 'Makkah Adhan'}</strong> ({settings.reminderMinutesBefore === 0 ? 'At Adhan' : `${settings.reminderMinutesBefore}m before`})</span>
           </div>
           <button
             onClick={() => setOverlayScreen('settings')}

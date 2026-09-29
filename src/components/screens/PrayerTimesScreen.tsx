@@ -280,7 +280,7 @@ export const PrayerTimesScreen: React.FC = () => {
         {/* Quick notification state button */}
         <div className="pt-3 border-t border-white/15 flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5 text-emerald-100/90 text-[11px]">
-            <span>Tone: <strong>{settings.athanSound}</strong></span>
+            <span>Tone: <strong>{settings.athanSound === 'Madina' ? 'Madina Adhan' : 'Makkah Adhan'}</strong></span>
             <span>·</span>
             <span>Remind: <strong>{settings.reminderMinutesBefore === 0 ? 'At Adhan' : `${settings.reminderMinutesBefore}m before`}</strong></span>
           </div>

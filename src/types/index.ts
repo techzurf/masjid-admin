@@ -127,7 +127,7 @@ export interface UserRegistration {
   status: 'Confirmed' | 'Under Review' | 'Active';
 }
 
-export type AthanSoundType = 'Makkah' | 'Madinah' | 'Al-Aqsa' | 'Soft Beep' | 'Bismillah' | 'Custom' | 'Silent';
+export type AthanSoundType = 'Makkah' | 'Madina';
 
 export interface ApproachingPrayerAlert {
   id: string;

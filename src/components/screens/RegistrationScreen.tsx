@@ -142,7 +142,7 @@ export const RegistrationScreen: React.FC = () => {
   // Success Confirmation View
   if (isSubmitted) {
     return (
-      <div className="w-full min-h-[80vh] flex flex-col justify-between p-6 bg-[#F7F9F7] animate-in fade-in">
+      <div className="w-full min-h-full flex flex-col justify-between p-6 bg-[#F7F9F7] animate-in fade-in">
         <div className="flex-1 flex flex-col items-center justify-center text-center">
           {/* Animated Success Badge */}
           <div className="w-20 h-20 rounded-full bg-emerald-100 border-4 border-emerald-200 text-[#087F5B] flex items-center justify-center mb-5 shadow-lg shadow-emerald-900/10">

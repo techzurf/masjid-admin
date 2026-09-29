@@ -202,9 +202,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        const validAthanSound: AthanSoundType = (parsed.athanSound === 'Madina' || parsed.athanSound === 'Madinah')
+          ? 'Madina'
+          : 'Makkah';
         return {
           ...defaultSettings,
           ...parsed,
+          athanSound: validAthanSound,
           prayerNotifications: {
             ...defaultSettings.prayerNotifications,
             ...(parsed.prayerNotifications || {})
@@ -256,10 +260,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Sound Preview & Playback Controls
   const previewSound = (sound: AthanSoundType) => {
+    // If the same sound is already playing, toggle it off (Play/Pause behavior)
+    if (isPlayingNotificationSound && currentlyPlayingTone === sound) {
+      stopSoundPreview();
+      return;
+    }
+
+    // Stop any previously playing audio immediately
+    stopSoundPreview();
     setIsPlayingNotificationSound(true);
     setCurrentlyPlayingTone(sound);
+
     playNotificationSound(sound, {
-      customDataUrl: settings.customAudioDataUrl,
       volume: settings.alertVolume,
       vibrate: settings.vibrateOnAlert,
       onEnded: () => {
@@ -315,20 +327,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setActivePrayerAlert(alertData);
 
-    // Play user-selected sound
-    if (settings.athanSound !== 'Silent') {
-      setIsPlayingNotificationSound(true);
-      setCurrentlyPlayingTone(settings.athanSound);
-      playNotificationSound(settings.athanSound, {
-        customDataUrl: settings.customAudioDataUrl,
-        volume: settings.alertVolume,
-        vibrate: settings.vibrateOnAlert,
-        onEnded: () => {
-          setIsPlayingNotificationSound(false);
-          setCurrentlyPlayingTone(null);
-        }
-      });
-    }
+    // Play user-selected Adhan sound (Makkah or Madina) for all 5 daily prayers
+    setIsPlayingNotificationSound(true);
+    setCurrentlyPlayingTone(settings.athanSound);
+    playNotificationSound(settings.athanSound, {
+      volume: settings.alertVolume,
+      vibrate: settings.vibrateOnAlert,
+      onEnded: () => {
+        setIsPlayingNotificationSound(false);
+        setCurrentlyPlayingTone(null);
+      }
+    });
 
     // Trigger Browser Web Notification if granted
     if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {

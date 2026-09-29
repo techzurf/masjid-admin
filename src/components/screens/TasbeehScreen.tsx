@@ -51,7 +51,7 @@ export const TasbeehScreen: React.FC = () => {
   const isTargetCompleted = tasbeehCount >= tasbeehTarget;
 
   return (
-    <div className="w-full min-h-[82vh] flex flex-col items-center justify-between px-4 pt-2 pb-8 text-center select-none">
+    <div className="w-full min-h-full flex flex-col items-center justify-between px-4 pt-2 pb-8 text-center select-none">
       {/* Top Presets Selector */}
       <div className="w-full flex flex-col items-center">
         <div className="flex gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-2 px-2">

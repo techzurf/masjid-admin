@@ -171,3 +171,92 @@ CREATE TRIGGER tr_community_members_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_prayer_times_updated_at();
 
+-- ==============================================================================
+-- Supabase Schema: masjid_notices for Madina Masjid MKB Nagar
+-- Stores public announcements and urgent advisories for home screen & admin
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS public.masjid_notices (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  message TEXT NOT NULL,
+  category TEXT DEFAULT 'Important Notice' NOT NULL,
+  image_url TEXT,
+  is_active BOOLEAN DEFAULT true NOT NULL,
+  priority INTEGER DEFAULT 0 NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+);
+
+-- Index for fast sorting by priority and created_at
+CREATE INDEX IF NOT EXISTS idx_masjid_notices_active_priority 
+  ON public.masjid_notices (is_active, priority DESC, created_at DESC);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE public.masjid_notices ENABLE ROW LEVEL SECURITY;
+
+-- 1. Read Policy (Public reads active notices, Admin reads all)
+DROP POLICY IF EXISTS "Allow select masjid_notices" ON public.masjid_notices;
+CREATE POLICY "Allow select masjid_notices"
+  ON public.masjid_notices
+  FOR SELECT
+  TO public
+  USING (true);
+
+-- 2. Insert Policy (Admin create)
+DROP POLICY IF EXISTS "Allow insert masjid_notices" ON public.masjid_notices;
+CREATE POLICY "Allow insert masjid_notices"
+  ON public.masjid_notices
+  FOR INSERT
+  TO public
+  WITH CHECK (true);
+
+-- 3. Update Policy (Admin update & activate/deactivate)
+DROP POLICY IF EXISTS "Allow update masjid_notices" ON public.masjid_notices;
+CREATE POLICY "Allow update masjid_notices"
+  ON public.masjid_notices
+  FOR UPDATE
+  TO public
+  USING (true)
+  WITH CHECK (true);
+
+-- 4. Delete Policy (Admin delete)
+DROP POLICY IF EXISTS "Allow delete masjid_notices" ON public.masjid_notices;
+CREATE POLICY "Allow delete masjid_notices"
+  ON public.masjid_notices
+  FOR DELETE
+  TO public
+  USING (true);
+
+-- Trigger for auto-updating updated_at
+DROP TRIGGER IF EXISTS tr_masjid_notices_updated_at ON public.masjid_notices;
+CREATE TRIGGER tr_masjid_notices_updated_at
+  BEFORE UPDATE ON public.masjid_notices
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_prayer_times_updated_at();
+
+-- Add table to Realtime publication
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' 
+    AND schemaname = 'public' 
+    AND tablename = 'masjid_notices'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.masjid_notices;
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+    -- Continue if publication does not exist or permission differs
+    NULL;
+END $$;
+
+-- Seed initial advisory notice
+INSERT INTO public.masjid_notices (title, message, category, is_active, priority)
+VALUES 
+  ('Friday Jumu''ah Parking Advisory', 'Due to road maintenance on 3rd Main Road, please use the M.K.B. Nagar side entrance and follow volunteer guidance.', 'Friday Jumu''ah', true, 1)
+ON CONFLICT DO NOTHING;
+
+
+

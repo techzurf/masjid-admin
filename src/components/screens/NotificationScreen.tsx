@@ -124,7 +124,7 @@ export const NotificationScreen: React.FC = () => {
           <Clock className="w-4 h-4 text-[#087F5B] shrink-0" />
           <div>
             <span className="font-bold text-slate-900 block text-[11px]">
-              Prayer Tone: {settings.athanSound} ({settings.reminderMinutesBefore === 0 ? 'At Adhan' : `${settings.reminderMinutesBefore}m before`})
+              Prayer Tone: {settings.athanSound === 'Madina' ? 'Madina Adhan' : 'Makkah Adhan'} ({settings.reminderMinutesBefore === 0 ? 'At Adhan' : `${settings.reminderMinutesBefore}m before`})
             </span>
             <span className="text-[10px] text-slate-600">
               Audio notifications active for configured prayers

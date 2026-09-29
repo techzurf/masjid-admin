@@ -63,7 +63,7 @@ export const MobileTopBar: React.FC<MobileTopBarProps> = ({
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-[1000] w-full max-w-[430px] mx-auto select-none transition-colors duration-200 pt-[env(safe-area-inset-top,0px)] ${
+      className={`w-full shrink-0 z-30 select-none transition-colors duration-200 pt-[env(safe-area-inset-top,0px)] ${
         settings.ramadanMode 
           ? 'bg-[#091A30] border-b border-amber-500/20 shadow-xs' 
           : 'bg-[#087F5B] bg-gradient-to-b from-[#076E4E] to-[#087F5B] shadow-xs'

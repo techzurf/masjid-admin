@@ -1,8 +1,6 @@
 import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { MobileShell } from './components/layout/MobileShell';
-import { MobileTopBar } from './components/layout/MobileTopBar';
-import { MobileBottomNav } from './components/layout/MobileBottomNav';
 
 // Screens
 import { SplashScreen } from './components/screens/SplashScreen';
@@ -93,11 +91,7 @@ const MainAppContent: React.FC = () => {
 
   return (
     <MobileShell>
-      <MobileTopBar />
-      <main className="w-full flex-1 flex flex-col pt-[calc(52px+env(safe-area-inset-top,0px))] sm:pt-[calc(56px+env(safe-area-inset-top,0px))] pb-[calc(80px+env(safe-area-inset-bottom,0px))]">
-        {renderCurrentScreen()}
-      </main>
-      <MobileBottomNav />
+      {renderCurrentScreen()}
     </MobileShell>
   );
 };

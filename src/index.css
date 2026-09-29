@@ -28,12 +28,39 @@
     --color-text-muted: #64748B;
   }
 
+  html,
   body {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
     font-family: var(--font-sans);
     background-color: #0E1612;
     color: var(--color-text-main);
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+  }
+
+  #root {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    position: relative;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -46,6 +73,16 @@
   scrollbar-width: none;
 }
 
+/* Primary Mobile Vertical Scroll Container */
+#main-scroll-container {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+}
+
 /* ─────────────────────────────────────────────────────────────
    ADMIN PANEL MOBILE WEBVIEW SCROLLING (ZERO VISIBLE SCROLLBARS)
    Suppresses visible scrollbars everywhere across Chrome, Safari,
@@ -53,9 +90,14 @@
    and trackpad scrolling.
    ───────────────────────────────────────────────────────────── */
 body.admin-mode,
-html.admin-mode {
+html.admin-mode,
+body.admin-mode #root {
   background-color: #F8FAFB !important;
+  overflow-y: auto !important;
   overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
@@ -183,10 +225,8 @@ html.admin-mode::-webkit-scrollbar {
 
 /* GSAP SplitText 3D Tube Animation Styles */
 .splittext-3d-banner {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: 165px;
   position: relative;
   overflow: hidden;

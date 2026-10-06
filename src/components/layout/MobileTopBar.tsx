@@ -36,6 +36,10 @@ export const MobileTopBar: React.FC<MobileTopBarProps> = ({
       case 'tasbeeh': return 'Digital Tasbeeh';
       case 'locator': return 'Masjid Locator';
       case 'connect_muslim': return 'Connect Muslim Services';
+      case 'work_halal_jobs': return 'WorkHalal Jobs';
+      case 'business_directory': return 'Muslim Business Directory';
+      case 'nikah_matrimony': return 'Nikah Matrimony Network';
+      case 'islamic_education': return 'Islamic Education Hub';
       case 'notifications': return 'Notifications';
       case 'donation': return 'Support Your Masjid';
       case 'registration': return 'Masjid Registration';
@@ -46,7 +50,8 @@ export const MobileTopBar: React.FC<MobileTopBarProps> = ({
       case 'lost_found': return 'Lost & Found';
       case 'event_detail': return 'Event Details';
       case 'service_detail': return 'Service Details';
-      case 'monthly_timetable': return 'Monthly Prayer Timetable';
+      case 'monthly_timetable':
+      case 'islamic_calendar': return 'Islamic Calendar';
       default: return title || 'Madina Masjid MKB Nagar';
     }
   };

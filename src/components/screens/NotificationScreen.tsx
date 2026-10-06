@@ -11,6 +11,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { NotificationItem } from '../../types';
+import { PullToRefresh } from '../common/PullToRefresh';
 
 export const NotificationScreen: React.FC = () => {
   const { 
@@ -91,8 +92,15 @@ export const NotificationScreen: React.FC = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    // Re-sync notifications and trigger notice fetch
+    window.dispatchEvent(new CustomEvent('refresh-masjid-data'));
+    await new Promise(res => setTimeout(res, 450));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
+    <PullToRefresh onRefresh={handleRefresh} containerId="main-scroll-container">
+      <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
       {/* Top Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -219,6 +227,7 @@ export const NotificationScreen: React.FC = () => {
           })
         )}
       </div>
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

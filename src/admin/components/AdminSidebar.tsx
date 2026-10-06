@@ -116,9 +116,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
       {/* Sidebar Container */}
       <aside className={`
-        fixed lg:sticky top-0 lg:top-16 z-50 lg:z-20
-        h-full lg:h-[calc(100vh-4rem)]
-        w-72 lg:w-64 bg-white border-r border-slate-200/90
+        fixed lg:relative inset-y-0 lg:inset-auto left-0 z-50 lg:z-10
+        h-full w-72 lg:w-64 bg-white border-r border-slate-200/90 shrink-0
         flex flex-col justify-between
         transition-transform duration-300 ease-in-out
         ${isOpenMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}

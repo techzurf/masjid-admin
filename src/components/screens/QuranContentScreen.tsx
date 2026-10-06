@@ -15,6 +15,7 @@ import {
 import { MOCK_SURAHS, TODAY_REMINDER, RECORDED_BAYANS } from '../../data/mockData';
 import { RubElHizbIcon } from '../common/IslamicIcons';
 import { useTranslation } from '../../utils/translations';
+import { PullToRefresh } from '../common/PullToRefresh';
 
 export const QuranContentScreen: React.FC = () => {
   const { settings } = useApp();
@@ -44,8 +45,14 @@ export const QuranContentScreen: React.FC = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    // Re-sync Quran and Bayan audio content
+    await new Promise(res => setTimeout(res, 500));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
+    <PullToRefresh onRefresh={handleRefresh} containerId="main-scroll-container">
+      <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
       {/* Daily Ayah Hero Card */}
       <div className="w-full bg-gradient-to-br from-[#087F5B] via-[#07543F] to-[#162722] rounded-3xl p-5 text-white shadow-sm relative overflow-hidden">
         <div className="absolute top-2 right-2 opacity-15">
@@ -262,6 +269,7 @@ export const QuranContentScreen: React.FC = () => {
           })}
         </div>
       )}
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

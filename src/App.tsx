@@ -11,6 +11,7 @@ import { EventsScreen } from './components/screens/EventsScreen';
 import { ServicesScreen } from './components/screens/ServicesScreen';
 import { RegistrationScreen } from './components/screens/RegistrationScreen';
 import { ConnectMuslimScreen } from './components/screens/ConnectMuslimScreen';
+import { ConnectMuslimComingSoonScreen } from './components/screens/ConnectMuslimComingSoonScreen';
 import { MasjidLocatorScreen } from './components/screens/MasjidLocatorScreen';
 import { QiblaScreen } from './components/screens/QiblaScreen';
 import { TasbeehScreen } from './components/screens/TasbeehScreen';
@@ -22,6 +23,7 @@ import { DailyDuaScreen } from './components/screens/DailyDuaScreen';
 import { ProfileScreen } from './components/screens/ProfileScreen';
 import { SettingsScreen } from './components/screens/SettingsScreen';
 import { LostFoundScreen } from './components/screens/LostFoundScreen';
+import { IslamicCalendarScreen } from './components/screens/IslamicCalendarScreen';
 import { AdminApp } from './admin/AdminApp';
 
 const MainAppContent: React.FC = () => {
@@ -49,6 +51,11 @@ const MainAppContent: React.FC = () => {
           return <MasjidLocatorScreen />;
         case 'connect_muslim':
           return <ConnectMuslimScreen />;
+        case 'work_halal_jobs':
+        case 'business_directory':
+        case 'nikah_matrimony':
+        case 'islamic_education':
+          return <ConnectMuslimComingSoonScreen serviceKey={overlayScreen} />;
         case 'notifications':
           return <NotificationScreen />;
         case 'donation':
@@ -65,6 +72,9 @@ const MainAppContent: React.FC = () => {
           return <MasjidAboutScreen />;
         case 'lost_found':
           return <LostFoundScreen />;
+        case 'islamic_calendar':
+        case 'monthly_timetable':
+          return <IslamicCalendarScreen />;
         default:
           break;
       }

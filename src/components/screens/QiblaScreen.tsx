@@ -107,10 +107,11 @@ export const QiblaScreen: React.FC = () => {
     };
 
     // Android Chrome & modern WebViews support deviceorientationabsolute for calibrated true north
-    if ('ondeviceorientationabsolute' in window) {
-      window.addEventListener('deviceorientationabsolute', handleOrientation as EventListener, true);
-    } else if ('ondeviceorientation' in window) {
-      window.addEventListener('deviceorientation', handleOrientation, true);
+    const win = window as any;
+    if ('ondeviceorientationabsolute' in win) {
+      win.addEventListener('deviceorientationabsolute', handleOrientation as EventListener, true);
+    } else if ('ondeviceorientation' in win) {
+      win.addEventListener('deviceorientation', handleOrientation as EventListener, true);
     } else {
       setCompassStatus('unavailable');
     }
@@ -124,10 +125,10 @@ export const QiblaScreen: React.FC = () => {
 
     return () => {
       clearTimeout(timer);
-      if ('ondeviceorientationabsolute' in window) {
-        window.removeEventListener('deviceorientationabsolute', handleOrientation as EventListener, true);
+      if ('ondeviceorientationabsolute' in win) {
+        win.removeEventListener('deviceorientationabsolute', handleOrientation as EventListener, true);
       }
-      window.removeEventListener('deviceorientation', handleOrientation, true);
+      win.removeEventListener('deviceorientation', handleOrientation as EventListener, true);
     };
   }, []);
 

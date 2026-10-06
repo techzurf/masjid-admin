@@ -22,6 +22,7 @@ import {
   updateCommunityMember, 
   deleteCommunityMember 
 } from '../../lib/supabase';
+import { PullToRefresh } from '../../components/common/PullToRefresh';
 
 interface AdminMembersScreenProps {
   onShowToast?: (message: string) => void;
@@ -177,7 +178,8 @@ export const AdminMembersScreen: React.FC<AdminMembersScreenProps> = ({ onShowTo
   });
 
   return (
-    <div className="w-full flex flex-col gap-5 sm:gap-6 animate-in fade-in duration-200">
+    <PullToRefresh onRefresh={loadMembers} containerId="admin-main-scroll">
+      <div className="w-full flex flex-col gap-5 sm:gap-6 animate-in fade-in duration-200">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-2xs">
@@ -678,6 +680,7 @@ export const AdminMembersScreen: React.FC<AdminMembersScreenProps> = ({ onShowTo
         </div>
       )}
 
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

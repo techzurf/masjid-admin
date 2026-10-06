@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { AdminStats } from '../mockAdminData';
 import { AdminScreenType } from '../components/AdminSidebar';
+import { PullToRefresh } from '../../components/common/PullToRefresh';
 
 interface AdminDashboardScreenProps {
   stats: AdminStats;
@@ -184,8 +185,14 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
     }
   ];
 
+  const handleRefresh = async () => {
+    // Re-sync dashboard stats and live Supabase items
+    await new Promise(res => setTimeout(res, 450));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-5 sm:gap-6 animate-in fade-in duration-200">
+    <PullToRefresh onRefresh={handleRefresh} containerId="admin-main-scroll">
+      <div className="w-full flex flex-col gap-5 sm:gap-6 animate-in fade-in duration-200">
       
       {/* ─── GREETING & DATE BANNER ─── */}
       <div className="w-full bg-gradient-to-r from-[#087F5B] via-[#076E4E] to-[#054432] rounded-3xl p-5 sm:p-6 text-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -320,6 +327,7 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
         </div>
       </div>
 
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

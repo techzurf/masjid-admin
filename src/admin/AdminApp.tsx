@@ -50,6 +50,14 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onExitAdmin }) => {
   // Active Screen
   const [currentScreen, setCurrentScreen] = useState<AdminScreenType>('dashboard');
 
+  // Scroll main content to top on screen change
+  React.useEffect(() => {
+    const scrollEl = document.getElementById('admin-main-scroll');
+    if (scrollEl) {
+      scrollEl.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [currentScreen]);
+
   // Mobile Drawer
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
@@ -176,7 +184,7 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onExitAdmin }) => {
   };
 
   return (
-    <div className="admin-portal-root min-h-screen w-full bg-[#F8FAFB] text-slate-900 flex flex-col font-sans antialiased overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="admin-portal-root h-screen h-[100dvh] w-full bg-[#F8FAFB] text-slate-900 flex flex-col font-sans antialiased overflow-hidden selection:bg-emerald-100 selection:text-emerald-900">
       
       {/* ─── TOAST NOTIFICATION ─── */}
       {toastMessage && (
@@ -186,7 +194,7 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onExitAdmin }) => {
         </div>
       )}
 
-      {/* ─── TOP NAVBAR ─── */}
+      {/* ─── TOP NAVBAR (Fixed / Stable) ─── */}
       <AdminNavbar
         onToggleSidebar={() => setMobileDrawerOpen(prev => !prev)}
         onPreviewApp={onExitAdmin}
@@ -195,10 +203,10 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onExitAdmin }) => {
         activeScreenTitle={getScreenTitle(currentScreen)}
       />
 
-      {/* ─── MAIN LAYOUT WRAPPER (Sidebar + Content) ─── */}
-      <div className="w-full max-w-7xl mx-auto flex-1 flex items-start">
+      {/* ─── MAIN LAYOUT WRAPPER (Fixed Sidebar + Scrollable Content) ─── */}
+      <div className="w-full max-w-7xl mx-auto flex-1 flex min-h-0 overflow-hidden relative">
         
-        {/* Desktop Sidebar & Mobile Drawer */}
+        {/* Desktop Sidebar & Mobile Drawer (Fixed / Stable) */}
         <AdminSidebar
           currentScreen={currentScreen}
           onSelectScreen={(screen) => setCurrentScreen(screen)}
@@ -211,8 +219,11 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onExitAdmin }) => {
           onPreviewApp={onExitAdmin}
         />
 
-        {/* Main Content Area */}
-        <main className="flex-1 w-full min-w-0 p-3.5 sm:p-6 lg:p-8 pb-24 lg:pb-12">
+        {/* Main Content Area (Primary & Only Vertical Scroll Container) */}
+        <main 
+          id="admin-main-scroll"
+          className="flex-1 w-full min-w-0 h-full overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 lg:p-8 pb-32 sm:pb-32 lg:pb-16 overscroll-contain focus:outline-none"
+        >
           {renderScreenContent()}
         </main>
       </div>

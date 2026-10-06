@@ -51,7 +51,7 @@ export const HomeServicesGrid: React.FC = () => {
 
   const handleCalendarClick = () => {
     triggerHapticFeedback('light');
-    setOverlayScreen('monthly_timetable');
+    setOverlayScreen('islamic_calendar');
   };
 
   const handleZakatClick = () => {

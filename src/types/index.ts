@@ -8,6 +8,10 @@ export type OverlayScreen =
   | 'tasbeeh'
   | 'locator'
   | 'connect_muslim'
+  | 'work_halal_jobs'
+  | 'business_directory'
+  | 'nikah_matrimony'
+  | 'islamic_education'
   | 'notifications'
   | 'donation'
   | 'registration'
@@ -18,7 +22,8 @@ export type OverlayScreen =
   | 'lost_found'
   | 'event_detail'
   | 'service_detail'
-  | 'monthly_timetable';
+  | 'monthly_timetable'
+  | 'islamic_calendar';
 
 export type AppLanguage = 'en' | 'ta' | 'ar';
 

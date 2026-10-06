@@ -11,24 +11,31 @@ import { LatestVideosSection } from '../home/LatestVideosSection';
 import { DailyReminderCard } from '../home/DailyReminderCard';
 import { PhoneCall } from 'lucide-react';
 import { useTranslation } from '../../utils/translations';
+import { PullToRefresh } from '../common/PullToRefresh';
 
 export const HomeScreen: React.FC = () => {
-  const { setOverlayScreen, settings } = useApp();
+  const { setOverlayScreen, settings, refreshPrayerTimes } = useApp();
   const t = useTranslation(settings.language);
 
+  const handleRefresh = async () => {
+    await refreshPrayerTimes();
+    window.dispatchEvent(new CustomEvent('refresh-masjid-data'));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
-      {/* 0. Ramadan Mode Dedicated Countdown Card (Iftar & Suhoor live timers) */}
-      {settings.ramadanMode && <RamadanCountdownCard />}
+    <PullToRefresh onRefresh={handleRefresh} containerId="main-scroll-container">
+      <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
+        {/* 0. Ramadan Mode Dedicated Countdown Card (Iftar & Suhoor live timers) */}
+        {settings.ramadanMode && <RamadanCountdownCard />}
 
-      {/* 1. Promotional Video & Main Prayer Time Hero Card Stack (Exact same left & right boundaries, zero gap) */}
-      <div className="w-full flex flex-col rounded-3xl overflow-hidden shadow-sm border border-emerald-950/10 bg-white">
-        <PromoVideoBanner />
-        <PrayerCard className="w-full bg-white p-4 relative overflow-hidden" />
-      </div>
+        {/* 1. Promotional Video & Main Prayer Time Hero Card Stack (Exact same left & right boundaries, zero gap) */}
+        <div className="w-full flex flex-col rounded-3xl overflow-hidden shadow-sm border border-emerald-950/10 bg-white">
+          <PromoVideoBanner />
+          <PrayerCard className="w-full bg-white p-4 relative overflow-hidden" />
+        </div>
 
-      {/* 2. Quick Services (5-Service Asymmetric Quick-Commerce Grid) */}
-      <QuickActions />
+        {/* 2. Quick Services (5-Service Asymmetric Quick-Commerce Grid) */}
+        <QuickActions />
 
         {/* 3. Important Masjid Announcement / Urgent Notice */}
         <AnnouncementBanner />
@@ -65,5 +72,7 @@ export const HomeScreen: React.FC = () => {
           </button>
         </div>
       </div>
-    );
-  };
+    </PullToRefresh>
+  );
+};
+

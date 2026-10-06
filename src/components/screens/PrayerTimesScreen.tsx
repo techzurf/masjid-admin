@@ -19,6 +19,7 @@ import {
 import { JUMMAH_INFO, MASJID_INFO, RAMADAN_TIMINGS } from '../../data/mockData';
 import { RubElHizbIcon } from '../common/IslamicIcons';
 import { useTranslation } from '../../utils/translations';
+import { PullToRefresh } from '../common/PullToRefresh';
 import { 
   fetchPrayerTimesForDate, 
   formatTo12h, 
@@ -38,7 +39,8 @@ export const PrayerTimesScreen: React.FC = () => {
     stopSoundPreview,
     triggerHapticFeedback,
     todayPrayerRecord,
-    computedPrayers
+    computedPrayers,
+    refreshPrayerTimes
   } = useApp();
   const t = useTranslation(settings.language);
 
@@ -47,6 +49,16 @@ export const PrayerTimesScreen: React.FC = () => {
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
   const [currentDateRecord, setCurrentDateRecord] = useState<PrayerTimeRecord | null>(todayPrayerRecord);
   const [countdown, setCountdown] = useState<string>('00:00:00');
+
+  const handleRefresh = async () => {
+    await refreshPrayerTimes();
+    if (dayOffset !== 0) {
+      const res = await fetchPrayerTimesForDate(currentDateKey);
+      if (res.data) {
+        setCurrentDateRecord(res.data);
+      }
+    }
+  };
 
   // Date calculation
   const baseDate = new Date();
@@ -181,8 +193,9 @@ export const PrayerTimesScreen: React.FC = () => {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
-      {/* Top Header Location & Timetable Actions */}
+    <PullToRefresh onRefresh={handleRefresh} containerId="main-scroll-container">
+      <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
+        {/* Top Header Location & Timetable Actions */}
       <div className="flex items-center justify-between">
         <div>
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#087F5B]">
@@ -508,6 +521,7 @@ export const PrayerTimesScreen: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

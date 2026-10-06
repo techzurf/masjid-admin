@@ -449,20 +449,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
-  // Auto transition from splash to onboarding or home after 2 seconds
-  useEffect(() => {
-    if (overlayScreen === 'splash') {
-      const timer = setTimeout(() => {
-        if (!hasSeenOnboarding) {
-          setOverlayScreen('onboarding');
-        } else {
-          setOverlayScreen(null);
-        }
-      }, 2200);
-      return () => clearTimeout(timer);
-    }
-  }, [overlayScreen, hasSeenOnboarding]);
-
   const completeOnboarding = () => {
     setHasSeenOnboarding(true);
     localStorage.setItem('alnoor_onboarding_done', 'true');

@@ -4,7 +4,7 @@ import {
   Home, 
   Compass, 
   LayoutGrid, 
-  Menu 
+  Info 
 } from 'lucide-react';
 import { MosqueIcon } from '../common/IslamicIcons';
 import gsap from 'gsap';
@@ -28,6 +28,7 @@ export const MobileBottomNav: React.FC = () => {
   const isRamadan = settings.ramadanMode;
   const containerRef = useRef<HTMLDivElement>(null);
   const [navWidth, setNavWidth] = useState(390);
+  const [navHeight, setNavHeight] = useState(58);
 
   // Determine active tab index (0 to 4)
   const getActiveIndex = (): number => {
@@ -67,30 +68,31 @@ export const MobileBottomNav: React.FC = () => {
       icon: (active) => <LayoutGrid className={`w-5 h-5 ${active ? 'text-white' : ''}`} strokeWidth={active ? 2.4 : 1.8} />,
     },
     {
-      id: 'more',
-      label: 'More',
-      icon: (active) => <Menu className={`w-5 h-5 ${active ? 'text-white' : ''}`} strokeWidth={active ? 2.4 : 1.8} />,
+      id: 'about',
+      label: 'About',
+      icon: (active) => <Info className={`w-5 h-5 ${active ? 'text-white' : ''}`} strokeWidth={active ? 2.4 : 1.8} />,
     },
   ];
 
-  // Measure container width responsively across 320px, 360px, 375px, 390px, 412px, 430px
+  // Measure container dimensions responsively across 320px, 360px, 375px, 390px, 412px, 430px
   useEffect(() => {
     if (!containerRef.current) return;
-    const updateWidth = () => {
+    const updateDimensions = () => {
       if (containerRef.current) {
-        const w = containerRef.current.getBoundingClientRect().width;
-        if (w > 0) setNavWidth(w);
+        const rect = containerRef.current.getBoundingClientRect();
+        if (rect.width > 0) setNavWidth(rect.width);
+        if (rect.height > 0) setNavHeight(rect.height);
       }
     };
-    updateWidth();
+    updateDimensions();
 
-    const ro = new ResizeObserver(updateWidth);
+    const ro = new ResizeObserver(updateDimensions);
     ro.observe(containerRef.current);
-    window.addEventListener('resize', updateWidth);
+    window.addEventListener('resize', updateDimensions);
 
     return () => {
       ro.disconnect();
-      window.removeEventListener('resize', updateWidth);
+      window.removeEventListener('resize', updateDimensions);
     };
   }, []);
 
@@ -136,7 +138,7 @@ export const MobileBottomNav: React.FC = () => {
   const topY = 0;
   const bottomY = 26;
   const halfW = 32;
-  const H = 105; // Sufficient vertical depth for bar + iPhone safe-area-inset-bottom
+  const H = navHeight || 58;
 
   const x0 = currentX - halfW;
   const x1 = currentX - 16;
@@ -189,7 +191,7 @@ export const MobileBottomNav: React.FC = () => {
     <nav
       ref={containerRef}
       aria-label="Masjid Bottom Navigation"
-      className="w-full shrink-0 z-40 select-none pointer-events-auto overflow-visible relative min-h-[68px]"
+      className="w-full shrink-0 z-40 select-none pointer-events-auto overflow-visible relative"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
@@ -271,7 +273,7 @@ export const MobileBottomNav: React.FC = () => {
       </div>
 
       {/* 3. Five Tab Interactive Columns */}
-      <div className="relative z-10 w-full h-[62px] sm:h-[66px] grid grid-cols-5 items-stretch">
+      <div className="relative z-10 w-full h-[58px] grid grid-cols-5 items-stretch">
         {navItems.map((item, index) => {
           const isActive = index === activeIndex;
 
@@ -279,7 +281,7 @@ export const MobileBottomNav: React.FC = () => {
             <button
               key={item.id}
               onClick={() => handleTabClick(index)}
-              className="relative flex flex-col items-center justify-end pb-1.5 pt-2 h-full cursor-pointer active:scale-95 transition-transform outline-none select-none"
+              className="relative flex flex-col items-center justify-center pb-1 pt-1.5 h-full cursor-pointer active:scale-95 transition-transform outline-none select-none"
               aria-label={item.label}
               aria-current={isActive ? 'page' : undefined}
             >

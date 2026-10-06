@@ -151,7 +151,7 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({ className }) => {
 
       {/* Adhan & Iqamah legend */}
       <div className="mt-2 px-1 flex items-center justify-between text-[10px] text-slate-500 font-medium">
-        <span>Top: Adhan / Bottom: Iqamah</span>
+        <span>Top: Iqamah / Bottom: Adhan</span>
         <span className="text-[#087F5B] font-semibold flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-full bg-[#D4A72C]"></span>
           <span>Madina Masjid MKB Nagar</span>

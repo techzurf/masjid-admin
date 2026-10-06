@@ -31,8 +31,8 @@ export const ProfileScreen: React.FC = () => {
   } = useApp();
 
   const userProfile = {
-    name: 'Brother Rayyan Mansoor',
-    email: 'rayyan.m@example.com',
+    name: 'Brother Mohammed Ahamed',
+    email: 'ahamed@example.com',
     memberId: 'MMM-8842',
     phone: '+91 98401 24100'
   };
@@ -46,7 +46,7 @@ export const ProfileScreen: React.FC = () => {
       <div className="w-full bg-white rounded-3xl p-5 border border-slate-200/80 shadow-2xs relative overflow-hidden">
         <div className="flex items-center gap-3.5 mb-3">
           <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-[#087F5B] to-[#07543F] text-white flex items-center justify-center font-bold text-lg shadow-md border-2 border-white">
-            AR
+            MA
           </div>
           <div>
             <div className="flex items-center gap-1.5">

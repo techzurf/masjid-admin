@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Video, Plus, Edit2, Trash2, Eye, X, Play, Clock, User, ExternalLink } from 'lucide-react';
 import { AdminBayan } from '../mockAdminData';
+import { PullToRefresh } from '../../components/common/PullToRefresh';
 
 interface AdminBayanScreenProps {
   bayans: AdminBayan[];
@@ -88,8 +89,14 @@ export const AdminBayanScreen: React.FC<AdminBayanScreenProps> = ({
     setModalOpen(false);
   };
 
+  const handleRefresh = async () => {
+    // Re-sync bayans
+    await new Promise(res => setTimeout(res, 450));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-5 sm:gap-6 animate-in fade-in duration-200">
+    <PullToRefresh onRefresh={handleRefresh} containerId="admin-main-scroll">
+      <div className="w-full flex flex-col gap-5 sm:gap-6 animate-in fade-in duration-200">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-2xs">
@@ -356,6 +363,7 @@ export const AdminBayanScreen: React.FC<AdminBayanScreenProps> = ({
         </div>
       )}
 
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

@@ -20,6 +20,7 @@ import {
 import { MOCK_SERVICES } from '../../data/mockData';
 import { ServiceItem } from '../../types';
 import { useTranslation } from '../../utils/translations';
+import { PullToRefresh } from '../common/PullToRefresh';
 
 export const ServicesScreen: React.FC = () => {
   const { 
@@ -125,8 +126,14 @@ export const ServicesScreen: React.FC = () => {
     setHasApplied(false);
   };
 
+  const handleRefresh = async () => {
+    // Re-sync services
+    await new Promise(res => setTimeout(res, 500));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
+    <PullToRefresh onRefresh={handleRefresh} containerId="main-scroll-container">
+      <div className="w-full flex flex-col gap-4 px-4 pt-3 pb-8">
       {/* Title */}
       <div>
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#087F5B]">
@@ -324,6 +331,7 @@ export const ServicesScreen: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };

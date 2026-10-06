@@ -25,7 +25,7 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
   activeScreenTitle
 }) => {
   return (
-    <header className="sticky top-0 z-30 w-full bg-white border-b border-slate-200/90 shadow-2xs">
+    <header className="shrink-0 z-30 w-full bg-white border-b border-slate-200/90 shadow-2xs">
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Left Section: Hamburger + Brand */}
         <div className="flex items-center gap-2.5 sm:gap-4">

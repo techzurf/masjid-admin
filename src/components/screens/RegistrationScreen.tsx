@@ -254,7 +254,7 @@ export const RegistrationScreen: React.FC = () => {
               required
               value={fullName}
               onChange={e => setFullName(e.target.value)}
-              placeholder="e.g. Rayyan Mansoor"
+              placeholder="e.g. Mohammed Ahamed"
               className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#087F5B]"
             />
           </div>
@@ -273,7 +273,7 @@ export const RegistrationScreen: React.FC = () => {
                 required
                 value={mobile}
                 onChange={e => setMobile(e.target.value)}
-                placeholder="+1 (555) 000-0000"
+                placeholder="+91 98765 43210"
                 className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#087F5B]"
               />
             </div>
@@ -290,7 +290,7 @@ export const RegistrationScreen: React.FC = () => {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="name@example.com"
+                placeholder="e.g. ahamed@example.com"
                 className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#087F5B]"
               />
             </div>
@@ -333,6 +333,7 @@ export const RegistrationScreen: React.FC = () => {
               type="date"
               value={dob}
               onChange={e => setDob(e.target.value)}
+              placeholder="dd-mm-yyyy"
               className="w-full h-11 px-3 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:border-[#087F5B]"
             />
           </div>
@@ -350,7 +351,7 @@ export const RegistrationScreen: React.FC = () => {
               required
               value={address}
               onChange={e => setAddress(e.target.value)}
-              placeholder="Street, City, Postal Code"
+              placeholder="e.g. No. 12, 2nd Main Rd, MKB Nagar, Chennai"
               className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#087F5B]"
             />
           </div>
@@ -385,7 +386,7 @@ export const RegistrationScreen: React.FC = () => {
             rows={2}
             value={additionalNotes}
             onChange={e => setAdditionalNotes(e.target.value)}
-            placeholder="Any specific requests, dietary preferences, or accessibility needs..."
+            placeholder="e.g. Family member count, elderly assistance, or specific queries..."
             className="w-full p-3 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#087F5B]"
           />
         </div>

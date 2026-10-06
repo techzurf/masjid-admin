@@ -45,11 +45,13 @@ export const AnnouncementBanner: React.FC = () => {
 
     window.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('focus', handleVisibilityChange);
+    window.addEventListener('refresh-masjid-data', loadActiveNotice);
 
     return () => {
       unsubscribe();
       window.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleVisibilityChange);
+      window.removeEventListener('refresh-masjid-data', loadActiveNotice);
     };
   }, []);
 

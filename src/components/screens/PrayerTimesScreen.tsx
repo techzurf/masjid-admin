@@ -140,20 +140,45 @@ export const PrayerTimesScreen: React.FC = () => {
     return `${dayOffset > 0 ? '+' : ''}${dayOffset} Days`;
   };
 
+  // Hardcoded Adhan times
+  const HARDCODED_ADHAN: Record<string, string> = {
+    fajr: '05:00 AM',
+    sunrise: '00:00 AM',
+    dhuhr: '01:00 PM',
+    asr: '04:30 PM',
+    maghrib: '06:02 PM',
+    isha: '07:45 PM'
+  };
+
+  // Database-connected Iqamah values
+  const getDatabaseIqamah = (key: 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'): string => {
+    if (key === 'sunrise') return '—';
+    const val = activeRecord[key];
+    if (val) return formatTo12h(val);
+    const fallbacks: Record<string, string> = {
+      fajr: '05:35 AM',
+      dhuhr: '01:25 PM',
+      asr: '04:50 PM',
+      maghrib: '07:22 PM',
+      isha: '08:55 PM'
+    };
+    return fallbacks[key] || '—';
+  };
+
   const prayersWithSunrise = [
     { 
       id: 'fajr', 
       name: 'Fajr', 
       arabic: 'الفجر', 
-      adhan: formatTo12h(activeRecord.fajr), 
-      iqamah: activeComputed.prayersList[0]?.iqamahTime || '05:35 AM', 
+      adhan: HARDCODED_ADHAN.fajr, 
+      iqamah: getDatabaseIqamah('fajr'), 
       isNext: nextPrayer.id === 'fajr' 
     },
     { 
       id: 'sunrise', 
       name: 'Sunrise', 
       arabic: 'الشروق', 
-      adhan: activeRecord.sunrise ? formatTo12h(activeRecord.sunrise) : '—', 
+      adhan: HARDCODED_ADHAN.sunrise, 
       iqamah: '—', 
       isNext: false, 
       isSunrise: true 
@@ -162,32 +187,32 @@ export const PrayerTimesScreen: React.FC = () => {
       id: 'dhuhr', 
       name: 'Dhuhr', 
       arabic: 'الظهر', 
-      adhan: formatTo12h(activeRecord.dhuhr), 
-      iqamah: activeComputed.prayersList[1]?.iqamahTime || '01:25 PM', 
+      adhan: HARDCODED_ADHAN.dhuhr, 
+      iqamah: getDatabaseIqamah('dhuhr'), 
       isNext: nextPrayer.id === 'dhuhr' 
     },
     { 
       id: 'asr', 
       name: 'Asr', 
       arabic: 'العصر', 
-      adhan: formatTo12h(activeRecord.asr), 
-      iqamah: activeComputed.prayersList[2]?.iqamahTime || '04:50 PM', 
+      adhan: HARDCODED_ADHAN.asr, 
+      iqamah: getDatabaseIqamah('asr'), 
       isNext: nextPrayer.id === 'asr' 
     },
     { 
       id: 'maghrib', 
       name: 'Maghrib', 
       arabic: 'المغرب', 
-      adhan: formatTo12h(activeRecord.maghrib), 
-      iqamah: activeComputed.prayersList[3]?.iqamahTime || '07:22 PM', 
+      adhan: HARDCODED_ADHAN.maghrib, 
+      iqamah: getDatabaseIqamah('maghrib'), 
       isNext: nextPrayer.id === 'maghrib' 
     },
     { 
       id: 'isha', 
       name: 'Isha', 
       arabic: 'العشاء', 
-      adhan: formatTo12h(activeRecord.isha), 
-      iqamah: activeComputed.prayersList[4]?.iqamahTime || '08:55 PM', 
+      adhan: HARDCODED_ADHAN.isha, 
+      iqamah: getDatabaseIqamah('isha'), 
       isNext: nextPrayer.id === 'isha' 
     }
   ];
@@ -276,10 +301,10 @@ export const PrayerTimesScreen: React.FC = () => {
         <div className="flex items-baseline justify-between mb-4">
           <div>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              {nextPrayer.name} · {nextPrayer.adhanTime}
+              {nextPrayer.name} · {HARDCODED_ADHAN[nextPrayer.id] || nextPrayer.adhanTime}
             </h2>
             <p className="text-xs text-emerald-100/90 font-medium mt-1">
-              Jama'ah Iqamah at <strong>{nextPrayer.iqamahTime}</strong>
+              Jama'ah Iqamah at <strong>{getDatabaseIqamah(nextPrayer.id as any)}</strong>
             </p>
           </div>
           <div className="text-right">
@@ -319,10 +344,10 @@ export const PrayerTimesScreen: React.FC = () => {
       {/* Complete 6-row Timetable (Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha) */}
       <div className="w-full bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider px-2">
-          <span>Prayer</span>
-          <span>Adhan</span>
-          <span>Iqamah</span>
-          <span>Alert</span>
+          <span className="w-24">Prayer</span>
+          <span className="flex-1 text-center">Adhan</span>
+          <span className="flex-1 text-center">Iqamah</span>
+          <span className="w-8 text-right">Alert</span>
         </div>
 
         <div className="divide-y divide-slate-100">
@@ -358,11 +383,13 @@ export const PrayerTimesScreen: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="text-sm font-bold text-slate-800 tabular-nums">
+                {/* Adhan time (first) - hardcoded static time */}
+                <div className="flex-1 text-center text-xs sm:text-sm font-medium text-slate-500 tabular-nums">
                   {p.adhan}
                 </div>
 
-                <div className="text-xs font-semibold text-slate-600 tabular-nums">
+                {/* Iqamah time (second) - existing dark text/time with database-connected Iqamah value */}
+                <div className="flex-1 text-center text-sm font-bold text-slate-800 tabular-nums">
                   {p.iqamah}
                 </div>
 

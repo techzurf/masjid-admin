@@ -150,19 +150,7 @@ export function App() {
       {isAdminView ? (
         <AdminApp onExitAdmin={handleExitAdmin} />
       ) : (
-        <>
-          <MainAppContent />
-          {/* Subtle floating toggle button for easy access during preview & admin evaluation */}
-          <button
-            type="button"
-            onClick={handleEnterAdmin}
-            className="fixed bottom-22 right-4 z-40 px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white text-[11px] font-bold shadow-lg flex items-center gap-1.5 backdrop-blur-xs border border-white/20 active:scale-95 transition-all cursor-pointer"
-            title="Switch to Masjid Admin Portal"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Admin Portal</span>
-          </button>
-        </>
+        <MainAppContent />
       )}
     </AppProvider>
   );

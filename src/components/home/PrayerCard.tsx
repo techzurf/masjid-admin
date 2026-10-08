@@ -141,9 +141,6 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({ className }) => {
               }`}>
                 {p.adhanTime.replace(' AM', '').replace(' PM', '')}
               </span>
-              <span className="text-[9px] text-slate-400 font-medium block">
-                {p.iqamahTime.replace(' AM', '').replace(' PM', '')}
-              </span>
             </div>
           );
         })}
